@@ -140,6 +140,14 @@ if __name__ == '__main__':
     #     # do not update density grid in finetune stage
     #     opt.update_extra_interval = 1e9
     
+    if not str(opt.head_ckpt).endswith("_ep*.pth") and os.path.isdir(opt.head_ckpt):
+        checkpoint_list = sorted(glob.glob(f'{opt.head_ckpt}/*_ep*.pth'))
+        if len(checkpoint_list) > 0:
+            opt.head_ckpt = checkpoint_list[-1]
+            print(f"[INFO] Latest checkpoint found: {opt.head_ckpt}")
+        else:
+            print(f"[ERROR] No checkpoint found, model randomly initialized.")
+
     print(opt)
     
     seed_everything(opt.seed)
@@ -150,7 +158,6 @@ if __name__ == '__main__':
 
     # manually load state dict for head
     if opt.torso and opt.head_ckpt != '':
-        
         model_dict = torch.load(opt.head_ckpt, map_location='cpu')['model']
 
         missing_keys, unexpected_keys = model.load_state_dict(model_dict, strict=False)

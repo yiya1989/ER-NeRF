@@ -759,7 +759,7 @@ class NeRFDataset:
             else:
                 size = 2 * self.poses.shape[0]
 
-        loader = DataLoader(list(range(size)), batch_size=1, collate_fn=self.collate, shuffle=self.training, num_workers=0)
+        loader = DataLoader(list(range(size)), batch_size=1, collate_fn=self.collate, shuffle=self.training, num_workers=0, pin_memory=False)
         loader._data = self # an ugly fix... we need poses in trainer.
 
         # do evaluate if has gt images and use self-driven setting
