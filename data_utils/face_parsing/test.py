@@ -17,6 +17,8 @@ import tqdm
 
 # import ttach as tta
 
+label_list = ['skin', 'nose', 'eye_g', 'l_eye', 'r_eye', 'l_brow', 'r_brow', 'l_ear', 'r_ear', 'mouth', 'u_lip', 'l_lip', 'hair', 'hat', 'ear_r', 'neck_l', 'neck', 'cloth']
+
 def vis_parsing_maps(im, parsing_anno, stride, save_im=False, save_path='vis_results/parsing_map_on_im.jpg',
                      img_size=(512, 512)):
     im = np.array(im)
@@ -36,10 +38,15 @@ def vis_parsing_maps(im, parsing_anno, stride, save_im=False, save_path='vis_res
     for pi in range(14, 16):
         index = np.where(vis_parsing_anno == pi)
         vis_parsing_anno_color[index[0], index[1], :] = np.array([0, 255, 0])
-    for pi in range(16, 17):
-        index = np.where(vis_parsing_anno == pi)
-        vis_parsing_anno_color[index[0], index[1], :] = np.array([0, 0, 255])
-    for pi in range(17, num_of_class+1):
+    # #16 衣服
+    # for pi in range(16, 17):
+    #     index = np.where(vis_parsing_anno == pi)
+    #     vis_parsing_anno_color[index[0], index[1], :] = np.array([0, 0, 255])
+    # #17 头发
+    # for pi in range(17, num_of_class+1):
+    #     index = np.where(vis_parsing_anno == pi)
+    #     vis_parsing_anno_color[index[0], index[1], :] = np.array([255, 0, 0])
+    for pi in range(18, num_of_class+1):
         index = np.where(vis_parsing_anno == pi)
         vis_parsing_anno_color[index[0], index[1], :] = np.array([255, 0, 0])
 
