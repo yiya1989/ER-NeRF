@@ -102,18 +102,24 @@ def extract_background(base_dir, ori_imgs_dir):
         imgs.append(img)
     imgs = np.stack(imgs).reshape(-1, num_pixs, 3)
 
-    bc_img = np.zeros((h*w, 3), dtype=np.uint8)
-    bc_img[bc_pixs_id, :] = imgs[bc_ids, bc_pixs_id, :]
-    bc_img = bc_img.reshape(h, w, 3)
+    # #org
+    # bc_img = np.zeros((h*w, 3), dtype=np.uint8)
+    # bc_img[bc_pixs_id, :] = imgs[bc_ids, bc_pixs_id, :]
+    # bc_img = bc_img.reshape(h, w, 3)
 
-    max_dist = max_dist.reshape(h, w)
-    bc_pixs = max_dist > 5
-    bg_xys = np.stack(np.nonzero(~bc_pixs)).transpose()
-    fg_xys = np.stack(np.nonzero(bc_pixs)).transpose()
-    nbrs = NearestNeighbors(n_neighbors=1, algorithm='kd_tree').fit(fg_xys)
-    distances, indices = nbrs.kneighbors(bg_xys)
-    bg_fg_xys = fg_xys[indices[:, 0]]
-    bc_img[bg_xys[:, 0], bg_xys[:, 1], :] = bc_img[bg_fg_xys[:, 0], bg_fg_xys[:, 1], :]
+    # max_dist = max_dist.reshape(h, w)
+    # bc_pixs = max_dist > 5
+    # bg_xys = np.stack(np.nonzero(~bc_pixs)).transpose()
+    # fg_xys = np.stack(np.nonzero(bc_pixs)).transpose()
+    # nbrs = NearestNeighbors(n_neighbors=1, algorithm='kd_tree').fit(fg_xys)
+    # distances, indices = nbrs.kneighbors(bg_xys)
+    # bg_fg_xys = fg_xys[indices[:, 0]]
+    # bc_img[bg_xys[:, 0], bg_xys[:, 1], :] = bc_img[bg_fg_xys[:, 0], bg_fg_xys[:, 1], :]
+
+    # lch
+    bc_img = np.zeros((h*w, 3), dtype=np.uint8) + np.array([0, 255, 0])  # + 255
+    # bc_img[bc_pixs_id, :] = imgs[bc_ids, bc_pixs_id, :]
+    bc_img = bc_img.reshape(h, w, 3)
 
     cv2.imwrite(os.path.join(base_dir, 'bc.jpg'), bc_img)
 
